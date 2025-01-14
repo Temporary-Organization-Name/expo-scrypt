@@ -1,0 +1,43 @@
+{
+  "name": "expo-scrypt",
+  "version": "1.0.0",
+  "description": "Scrypt implementation for Expo",
+  "author": "Temporary Organization Name",
+  "license": "MIT",
+  "homepage": "https://github.com/Temporary-Organization-Name/expo-scrypt#readme",
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
+  "scripts": {
+    "build": "expo-module build",
+    "clean": "expo-module clean",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "prepare": "expo-module prepare",
+    "prepublishOnly": "expo-module prepublishOnly",
+    "expo-module": "expo-module",
+    "typecheck": "tsc --noEmit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Temporary-Organization-Name/expo-scrypt.git"
+  },
+  "dependencies": {
+    "expo-modules-core": "^1.5.11"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.0",
+    "@types/react-native": "^0.72.0",
+    "expo-module-scripts": "^3.1.0",
+    "typescript": "^5.0.0",
+    "expo-modules-core": "^1.5.11",
+    "jest": "^29.7.0",
+    "@types/jest": "^29.5.0",
+    "@testing-library/react-native": "^12.0.0",
+    "ts-jest": "^29.1.0"
+  },
+  "peerDependencies": {
+    "expo": "*",
+    "react": "*",
+    "react-native": "*"
+  }
+}

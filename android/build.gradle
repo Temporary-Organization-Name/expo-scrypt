@@ -1,0 +1,3 @@
+dependencies {
+    implementation "com.lambdaworks:scrypt:1.4.0"
+} 
