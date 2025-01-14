@@ -3,24 +3,25 @@ package expo.modules.scrypt
 import expo.modules.kotlin.modules.Module
 import expo.modules.kotlin.modules.ModuleDefinition
 import com.lambdaworks.crypto.SCrypt
-import java.nio.charset.StandardCharsets
+import android.util.Base64
 import kotlin.math.pow
 
 class ExpoScryptModule : Module() {
     override fun definition() = ModuleDefinition {
         Name("ExpoScrypt")
 
-        AsyncFunction("scrypt") { password: String, salt: String, options: Map<String, Int> ->
+        AsyncFunction("scrypt") { passwordBase64: String, saltBase64: String, options: Map<String, Int>, callback: Function<Double>? ->
             try {
+                // Decode base64 inputs
+                val passwordBytes = Base64.decode(passwordBase64, Base64.DEFAULT)
+                val saltBytes = Base64.decode(saltBase64, Base64.DEFAULT)
+
                 // Validate null parameters
-                if (password.isEmpty() || salt.isEmpty()) {
+                if (passwordBytes.isEmpty() || saltBytes.isEmpty()) {
                     throw IllegalArgumentException("Password and salt must not be empty")
                 }
 
                 // Validate password and salt lengths
-                val passwordBytes = password.toByteArray(StandardCharsets.UTF_8)
-                val saltBytes = salt.toByteArray(StandardCharsets.UTF_8)
-
                 if (passwordBytes.size > 1024) {
                     throw IllegalArgumentException("Password length must not exceed 1024 bytes")
                 }
@@ -70,6 +71,9 @@ class ExpoScryptModule : Module() {
                     p,
                     dkLen
                 )
+
+                // Report 100% completion if callback is provided
+                callback?.invoke(1.0)
 
                 derived.joinToString("") { "%02x".format(it) }
             } catch (e: OutOfMemoryError) {

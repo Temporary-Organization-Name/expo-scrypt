@@ -1,12 +1,18 @@
 {
   "name": "expo-scrypt",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "Scrypt implementation for Expo",
   "author": "Temporary Organization Name",
   "license": "MIT",
   "homepage": "https://github.com/Temporary-Organization-Name/expo-scrypt#readme",
   "main": "build/index.js",
   "types": "build/index.d.ts",
+  "files": [
+    "build",
+    "android",
+    "ios",
+    "expo-scrypt.podspec"
+  ],
   "scripts": {
     "build": "expo-module build",
     "clean": "expo-module clean",

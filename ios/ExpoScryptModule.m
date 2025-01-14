@@ -9,15 +9,25 @@
 EX_EXPORT_MODULE(ExpoScrypt);
 
 EX_EXPORT_METHOD_AS(scrypt,
-                    scrypt:(NSString *)password
-                    withSalt:(NSString *)salt
+                    scrypt:(NSString *)passwordBase64
+                    withSalt:(NSString *)saltBase64
                     withOptions:(NSDictionary *)options
+                    withCallback:(EXPromiseResolveBlock)callback
                     resolver:(EXPromiseResolveBlock)resolve
                     rejecter:(EXPromiseRejectBlock)reject)
 {
     // Check for null parameters
-    if (!password || !salt || !options) {
+    if (!passwordBase64 || !saltBase64 || !options) {
         reject(@"ERR_INVALID_PARAMS", @"Password, salt, and options must not be null", nil);
+        return;
+    }
+    
+    // Decode base64 inputs
+    NSData *passwordData = [[NSData alloc] initWithBase64EncodedString:passwordBase64 options:0];
+    NSData *saltData = [[NSData alloc] initWithBase64EncodedString:saltBase64 options:0];
+    
+    if (!passwordData || !saltData) {
+        reject(@"ERR_INVALID_PARAMS", @"Invalid base64 encoding for password or salt", nil);
         return;
     }
     
@@ -64,9 +74,6 @@ EX_EXPORT_METHOD_AS(scrypt,
         return;
     }
     
-    NSData *passwordData = [password dataUsingEncoding:NSUTF8StringEncoding];
-    NSData *saltData = [salt dataUsingEncoding:NSUTF8StringEncoding];
-    
     // Validate password and salt lengths
     if (passwordData.length == 0 || passwordData.length > 1024) {
         reject(@"ERR_INVALID_PARAMS", @"Password length must be between 1 and 1024 bytes", nil);
@@ -106,6 +113,11 @@ EX_EXPORT_METHOD_AS(scrypt,
         free(derivedKey);
         reject(@"ERR_SCRYPT_FAILED", @"Scrypt operation failed", nil);
         return;
+    }
+    
+    // Report 100% completion if callback is provided
+    if (callback) {
+        callback(@[@1.0]);
     }
     
     NSData *derivedKeyData = [NSData dataWithBytes:derivedKey length:dkLenValue];
