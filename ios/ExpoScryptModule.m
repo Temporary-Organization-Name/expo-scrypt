@@ -1,7 +1,8 @@
 #import <ExpoModulesCore/ExpoModulesCore.h>
 #import <CommonCrypto/CommonCrypto.h>
 
-@interface ExpoScryptModule : ExpoModule
+// Forward declare the interface in the implementation file
+@interface ExpoScryptModule : EXModule
 @end
 
 @implementation ExpoScryptModule
