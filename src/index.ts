@@ -14,3 +14,8 @@ export async function scrypt(
 ): Promise<string> {
   return await ExpoScryptModule.scrypt(password, salt, options);
 }
+
+// Add a default export for better module compatibility
+export default {
+  scrypt,
+};
