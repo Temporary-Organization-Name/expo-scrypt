@@ -17,22 +17,23 @@ export async function scrypt(
   p: number,
   dkLen: number,
   callback?: ProgressCallback
-): Promise<string> {
+): Promise<Uint8Array> {
   // Convert ArrayLike<number> to base64 strings for native modules
   const passwordArray = Array.from(password);
   const saltArray = Array.from(salt);
   const passwordBase64 = Buffer.from(passwordArray).toString("base64");
   const saltBase64 = Buffer.from(saltArray).toString("base64");
 
-  return await ExpoScryptModule.scrypt(
+  const byteArray = await ExpoScryptModule.scrypt(
     passwordBase64,
     saltBase64,
     { N, r, p, dkLen },
     callback
   );
+
+  return new Uint8Array(byteArray);
 }
 
-// Add a default export for better module compatibility
 export default {
   scrypt,
 };

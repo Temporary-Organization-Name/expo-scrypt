@@ -120,23 +120,14 @@ EX_EXPORT_METHOD_AS(scrypt,
         callback(@[@1.0]);
     }
     
-    NSData *derivedKeyData = [NSData dataWithBytes:derivedKey length:dkLenValue];
-    free(derivedKey);
-    
-    NSString *hexString = [self hexStringFromData:derivedKeyData];
-    resolve(hexString);
-}
-
-- (NSString *)hexStringFromData:(NSData *)data {
-    const unsigned char *dataBuffer = (const unsigned char *)[data bytes];
-    NSUInteger dataLength = [data length];
-    NSMutableString *hexString = [NSMutableString stringWithCapacity:(dataLength * 2)];
-    
-    for (int i = 0; i < dataLength; ++i) {
-        [hexString appendFormat:@"%02x", dataBuffer[i]];
+    // Convert bytes to array of numbers
+    NSMutableArray *byteArray = [NSMutableArray arrayWithCapacity:dkLenValue];
+    for (NSUInteger i = 0; i < dkLenValue; i++) {
+        [byteArray addObject:@(derivedKey[i])];
     }
     
-    return [hexString copy];
+    free(derivedKey);
+    resolve(byteArray);
 }
 
 @end 

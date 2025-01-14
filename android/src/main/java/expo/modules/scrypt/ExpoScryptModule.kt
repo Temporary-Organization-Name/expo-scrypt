@@ -75,7 +75,8 @@ class ExpoScryptModule : Module() {
                 // Report 100% completion if callback is provided
                 callback?.invoke(1.0)
 
-                derived.joinToString("") { "%02x".format(it) }
+                // Return bytes directly as a List<Int>
+                derived.map { it.toInt() and 0xFF }
             } catch (e: OutOfMemoryError) {
                 throw Exception("Failed to allocate memory for scrypt operation")
             } catch (e: IllegalArgumentException) {
